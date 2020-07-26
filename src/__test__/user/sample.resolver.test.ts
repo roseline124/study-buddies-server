@@ -1,7 +1,7 @@
 import casual from 'casual'
 import { gql } from 'apollo-server'
 import { createTestClient } from 'apollo-server-testing'
-import { createTestServer } from './utils'
+import { createTestServer } from '../utils'
 
 const server = createTestServer({
   mocks: {
