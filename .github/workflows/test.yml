@@ -13,7 +13,6 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_DATABASE: studybuddies_test
-          MYSQL_HOST: mysql
         ports:
           - 9876:3306
 
@@ -29,3 +28,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
       - run: yarn test
+        env:
+          MYSQL_HOST: mysql
