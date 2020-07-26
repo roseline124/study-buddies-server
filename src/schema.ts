@@ -7,9 +7,10 @@ import path from 'path'
 import resolvers from './resolvers'
 
 const allTypeDefs = loadFilesSync(path.join(__dirname, '../schema/**/*.graphql'))
+export const typeDefs = mergeTypeDefs(allTypeDefs)
 
 const schema: GraphQLSchema = makeExecutableSchema({
-  typeDefs: mergeTypeDefs(allTypeDefs),
+  typeDefs,
   resolvers,
 })
 

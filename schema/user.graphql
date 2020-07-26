@@ -5,7 +5,7 @@ type User {
   profileURL: String
   consecutiveStudyDays: [Date!]!
   posts(orderBy: PostOrder, limit: Int): [Post!]! # orderBy: default { field: 'likeCount', direction: 'desc'}, limit: 10
-  recommendations(limit: Int): [Post!]! # limit: default 10
+  recommendations(limit: Int): [Post!]! # limit: default 5
   followers: [User!]!
   followings: [User!]!
   createdAt: Date
