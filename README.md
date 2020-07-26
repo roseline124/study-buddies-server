@@ -73,3 +73,9 @@ Don't forget to sync your mysql setting and env vars in `config.ts`
 - `yarn build`: first of all, check build is ok
 - `docker build -t studybuddies .`: build docker image
 - `docker run --publish 3000:3000 -d --name local studybuddies`: run docker container named `local`
+
+### integration test
+
+- create test db: `CREATE DATABASE studybuddies_test;`
+- update `.env`: `MYSQL_DATABASE=studybuddies_test`
+- run `yarn test`

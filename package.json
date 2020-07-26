@@ -9,7 +9,7 @@
     "start": "node 'dist/server.js'",
     "build": "tsc -p .",
     "lint": "eslint --fix src/**/*.ts",
-    "test": "jest",
+    "test": "NODE_ENV=test jest",
     "gql-gen": "graphql-codegen --config codegen.yml"
   },
   "repository": {
@@ -51,7 +51,9 @@
     "@types/lodash": "^4.14.157",
     "@types/passport-google-oauth": "^1.0.41",
     "@types/passport-google-oauth20": "^2.0.3",
+    "apollo-server": "^2.16.0",
     "apollo-server-express": "^2.15.1",
+    "casual": "^1.6.2",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
