@@ -13,7 +13,9 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  await sequelize.close()
+  if (sequelize) {
+    await sequelize.close()
+  }
 })
 
 describe('User', () => {

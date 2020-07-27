@@ -8,22 +8,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      MYSQL_DATABASE: studybuddies_test
+
     services:
       mysql-service:
         image: mysql:5.7
-        env:
-          MYSQL_DATABASE: studybuddies_test
+
         ports:
-          - 9876:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+          - 9876:9876
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [8.x, 10.x, 12.x]
 
     steps:
       - uses: actions/checkout@v2
