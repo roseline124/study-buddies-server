@@ -13,9 +13,8 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_DATABASE: studybuddies_test
-          MYSQL_HOST: mysql
         ports:
-          - 9876:9876
+          - 9876
 
     strategy:
       matrix:
