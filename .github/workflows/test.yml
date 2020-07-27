@@ -11,12 +11,12 @@ jobs:
     env:
       MYSQL_DATABASE: studybuddies_test
       MYSQL_USERNAME: root
+      MYSQL_HOST: mysql
+      MYSQL_PASSWORD: 1234
 
     services:
       mysql-service:
         image: mysql:5.7
-        env:
-          MYSQL_PASSWORD: 1234
         ports:
           - 9876
 
