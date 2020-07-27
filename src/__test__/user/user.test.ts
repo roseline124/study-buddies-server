@@ -2,7 +2,7 @@ import casual from 'casual'
 import { gql } from 'apollo-server'
 import { createTestClient } from 'apollo-server-testing'
 import { createTestServer } from '../utils'
-import { createUserMock, createUser, deleteUser } from './user.mock'
+import { createUserMock, createUser, deleteUser } from '../mocks/user.mock'
 import { sequelizeInit } from '../../models'
 
 const mocks = { User: createUserMock() }
