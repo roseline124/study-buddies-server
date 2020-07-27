@@ -8,11 +8,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      MYSQL_DATABASE: studybuddies_test
+      MYSQL_USERNAME: root
+
     services:
       mysql-service:
         image: mysql:5.7
         env:
-          MYSQL_DATABASE: studybuddies_test
+          MYSQL_PASSWORD: 1234
         ports:
           - 9876
 
