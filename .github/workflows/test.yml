@@ -15,7 +15,7 @@ jobs:
           MYSQL_DATABASE: studybuddies_test
           MYSQL_HOST: mysql
         ports:
-          - 9876:3306
+          - 9876:9876
 
     strategy:
       matrix:
