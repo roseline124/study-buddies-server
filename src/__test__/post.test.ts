@@ -1,8 +1,8 @@
 import { gql } from 'apollo-server'
 import { createTestClient } from 'apollo-server-testing'
-import { createTestServer } from '../utils'
-import { sequelizeInit } from '../../models'
-import { createPostMock } from '../mocks/post.mock'
+import { createTestServer } from './utils'
+import { sequelizeInit } from '../models'
+import { createPostMock } from './mocks/post.mock'
 
 const mocks = { Post: createPostMock() }
 const server = createTestServer({ mocks })
