@@ -12,6 +12,7 @@ jobs:
       MYSQL_DATABASE: studybuddies_test
       MYSQL_USERNAME: root
       MYSQL_PASSWORD: 1234
+      MYSQL_HOST: 127.0.0.1
 
     services:
       mysql-service:
