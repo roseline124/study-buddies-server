@@ -20,10 +20,13 @@ afterAll(async () => {
 
 describe('User', () => {
   it('get user by id', async () => {
+    console.log(1)
     const server = createTestServer({ mocks })
+    console.log(2)
     const { query } = createTestClient(server)
 
     const user = await createUser({ id: casual.uuid })
+    console.log(3)
     const GET_USER = gql`
       query($id: ID!) {
         user(id: $id) {
@@ -33,8 +36,10 @@ describe('User', () => {
     `
 
     const { data } = await query({ query: GET_USER, variables: { id: user.id } })
+    console.log(4)
     expect(data?.user?.id).toEqual(user.id)
 
+    console.log(5)
     await deleteUser(user.id)
   })
 
