@@ -27,16 +27,14 @@ export const deleteUser = async (id: string) => {
 
 export const createTestServer = async (serverConfig: ApolloServerExpressConfig) => {
   const { mocks } = serverConfig
-  const currentUser = await createUser({ id: casual.uuid })
+  const currentUser = await createUser({ id: casual.uuid, name: casual.name })
 
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: () => {
-      {
-        currentUser
-      }
-    },
+    context: () => ({
+      currentUser,
+    }),
     mocks,
     mockEntireSchema: false, // prevent overwriting resolvers
   })

@@ -4,6 +4,7 @@ import { createTestClient } from 'apollo-server-testing'
 import { createTestServer, createUser, deleteUser } from './utils'
 import { createUserMock } from './mocks/user.mock'
 import { sequelizeInit } from '../models'
+import { User } from '../models/User'
 
 const mocks = { User: createUserMock() }
 
@@ -18,11 +19,14 @@ afterAll(async () => {
   }
 })
 
+afterEach(async () => {
+  User.destroy({ truncate: true })
+})
+
 describe('User', () => {
   it('get user by id', async () => {
-    const { server } = await createTestServer({ mocks })
+    const { server, currentUser } = await createTestServer({ mocks })
     const { query } = createTestClient(server)
-
     const user = await createUser({ id: casual.uuid })
     const GET_USER = gql`
       query($id: ID!) {
@@ -34,8 +38,6 @@ describe('User', () => {
 
     const { data } = await query({ query: GET_USER, variables: { id: user.id } })
     expect(data?.user?.id).toEqual(user.id)
-
-    await deleteUser(user.id)
   })
 
   it('get login user', async () => {
@@ -50,9 +52,7 @@ describe('User', () => {
       }
     `
 
-    const { data } = await query({ query: GET_CURRENT_USER, variables: { id: currentUser.id } })
+    const { data } = await query({ query: GET_CURRENT_USER })
     expect(data?.currentUser?.id).toEqual(currentUser.id)
-
-    await deleteUser(currentUser.id)
   })
 })
