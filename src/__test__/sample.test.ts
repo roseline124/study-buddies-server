@@ -2,6 +2,7 @@ import { gql } from 'apollo-server'
 import { createTestClient } from 'apollo-server-testing'
 import { createTestServer } from './utils'
 import { sequelizeInit } from '../models'
+import { User } from '../models/User'
 
 let sequelize
 beforeAll(async () => {

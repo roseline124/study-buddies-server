@@ -15,9 +15,7 @@ import { PERMISSION_ERROR } from '../errorMessages'
 
 const resolver: Resolvers = {
   Post: {
-    author: async post => {
-      return await User.findByPk(post?.authorID)
-    },
+    author: async post => await User.findByPk(post?.authorID),
     hashTags: async post => {
       return await HashTag.findAll({ where: { postID: post?.id } })
     },
@@ -30,6 +28,7 @@ const resolver: Resolvers = {
       const likePosts = await LikePost.findAll({ where: { postID: post?.id } })
       return likePosts?.length
     },
+    url: post => post.url,
     title: async post => {
       if (post?.title) return post?.title
       if (!post.url) return ''
@@ -68,7 +67,7 @@ const resolver: Resolvers = {
     },
   },
   Query: {
-    post: async (_, { id }): Promise<Post> => {
+    post: async (_, { id }) => {
       return await Post.findByPk(id)
     },
     postGetMany: async (_, { input }) => {
@@ -104,7 +103,7 @@ const resolver: Resolvers = {
         }),
       })
 
-      if (!posts.length) return null
+      if (!posts?.length) return null
 
       if (postGroup === PostGroup.Author) {
         const groupedPosts = groupBy(posts, post => post.authorID)
@@ -141,7 +140,7 @@ const resolver: Resolvers = {
 
       const { url, hashTags } = input
 
-      const { error, result } = await ogs({
+      const { result } = await ogs({
         url,
         onlyGetOpenGraphInfo: true,
       })
@@ -154,19 +153,19 @@ const resolver: Resolvers = {
         previewURL: result?.ogImage?.url || '',
       })
 
-      if (error) throw new ApolloError(error)
-
-      await Promise.all(
-        hashTags.map(async hashTagName => {
-          const [hashTag] = await HashTag.findOrCreate({
-            where: { name: hashTagName, postID: post?.id },
-          })
-          await PostHashTagConnection.create({
-            postID: post?.id,
-            hashtagID: hashTag?.id,
-          })
-        }),
-      )
+      if (hashTags?.length) {
+        await Promise.all(
+          hashTags.map(async hashTagName => {
+            const [hashTag] = await HashTag.findOrCreate({
+              where: { name: hashTagName, postID: post?.id },
+            })
+            await PostHashTagConnection.create({
+              postID: post?.id,
+              hashtagID: hashTag?.id,
+            })
+          }),
+        )
+      }
 
       return { post }
     },

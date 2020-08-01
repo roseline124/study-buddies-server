@@ -6,4 +6,4 @@ import sample from './sample.resolver'
 import user from './user.resolver'
 import hashTag from './hashTag.resolver'
 
-export default mergeResolvers([likePost as any, post as any, sample as any, user as any, hashTag as any])
+export default mergeResolvers([user as any, post as any, likePost as any, sample as any, hashTag as any])

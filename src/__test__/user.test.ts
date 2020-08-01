@@ -19,10 +19,6 @@ afterAll(async () => {
   }
 })
 
-afterEach(async () => {
-  User.destroy({ truncate: true })
-})
-
 describe('User', () => {
   it('get user by id', async () => {
     const { server, currentUser } = await createTestServer({ mocks })
