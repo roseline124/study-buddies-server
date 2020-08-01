@@ -1,19 +1,27 @@
-import { ApolloServer, IMocks } from 'apollo-server'
+import casual from 'casual'
+import { ApolloServer } from 'apollo-server'
 import { ApolloServerExpressConfig } from 'apollo-server-express'
 import { typeDefs } from '../schema'
 import resolvers from '../resolvers'
+import { createUser } from './mocks'
 
-export const createTestServer = (serverConfig: ApolloServerExpressConfig) => {
-  const { context, mocks } = serverConfig
+export const createTestServer = async (serverConfig: ApolloServerExpressConfig) => {
+  const { mocks } = serverConfig
+  const currentUser = await createUser({ id: casual.uuid })
+
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context,
+    context: () => {
+      {
+        currentUser
+      }
+    },
     mocks,
     mockEntireSchema: false, // prevent overwriting resolvers
   })
 
-  return server
+  return { server, currentUser }
 }
 
 export const getSubDays = (baseDate: Date, amount: number) => {

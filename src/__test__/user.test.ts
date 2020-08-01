@@ -20,7 +20,7 @@ afterAll(async () => {
 
 describe('User', () => {
   it('get user by id', async () => {
-    const server = createTestServer({ mocks })
+    const { server } = await createTestServer({ mocks })
     const { query } = createTestClient(server)
 
     const user = await createUser({ id: casual.uuid })
@@ -39,8 +39,7 @@ describe('User', () => {
   })
 
   it('get login user', async () => {
-    const currentUser = await createUser({ id: casual.uuid })
-    const server = createTestServer({ mocks, context: () => ({ currentUser }) })
+    const { server, currentUser } = await createTestServer({ mocks })
     const { query } = createTestClient(server)
 
     const GET_CURRENT_USER = gql`
