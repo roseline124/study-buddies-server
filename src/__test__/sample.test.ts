@@ -1,18 +1,29 @@
-import casual from 'casual'
 import { gql } from 'apollo-server'
 import { createTestClient } from 'apollo-server-testing'
 import { createTestServer } from './utils'
+import { sequelizeInit } from '../models'
 
-const server = createTestServer({
-  mocks: {
-    Query: () => ({ helloWorld: () => '' }),
-  },
+let sequelize
+beforeAll(async () => {
+  sequelize = await sequelizeInit()
 })
 
-const { query } = createTestClient(server)
+afterAll(async () => {
+  if (sequelize) {
+    await sequelize.close()
+  }
+})
 
 describe('Sample', () => {
   it('hello world', async () => {
+    const { server } = await createTestServer({
+      mocks: {
+        Query: () => ({ helloWorld: () => '' }),
+      },
+    })
+
+    const { query } = createTestClient(server)
+
     const HELLO_WORLD = gql`
       query HelloWorld {
         helloWorld
