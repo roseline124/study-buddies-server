@@ -76,6 +76,12 @@ Don't forget to sync your mysql setting and env vars in `config.ts`
 
 ### integration test
 
+1. start
+
 - run `docker-compose up -d`
 - update `.env`: `MYSQL_DATABASE=studybuddies_test`
 - run `yarn test`
+
+2. end
+
+- run `docker-compose down`
