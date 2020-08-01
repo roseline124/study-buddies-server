@@ -76,6 +76,6 @@ Don't forget to sync your mysql setting and env vars in `config.ts`
 
 ### integration test
 
-- create test db: `CREATE DATABASE studybuddies_test;`
+- run `docker-compose up -d`
 - update `.env`: `MYSQL_DATABASE=studybuddies_test`
 - run `yarn test`
