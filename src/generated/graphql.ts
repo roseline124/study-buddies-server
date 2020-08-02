@@ -135,7 +135,6 @@ export type Post = {
 };
 
 export type PostCreateInput = {
-  authorID: Scalars['String'];
   url: Scalars['String'];
   hashTags?: Maybe<Array<Scalars['String']>>;
 };
