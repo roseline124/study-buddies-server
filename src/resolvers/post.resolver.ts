@@ -2,7 +2,7 @@ import ogs from 'open-graph-scraper'
 import groupBy from 'lodash/groupBy'
 import flatMap from 'lodash/flatMap'
 import uniq from 'lodash/uniq'
-import { ApolloError } from 'apollo-server-express'
+import { AuthenticationError, ApolloError } from 'apollo-server-express'
 import { Op } from 'sequelize'
 
 import { HashTag } from '../models/HashTag'
@@ -10,7 +10,8 @@ import { LikePost } from '../models/LikePost'
 import { Post } from '../models/Post'
 import { User } from '../models/User'
 import { PostHashTagConnection } from '../models/PostHashTagConnection'
-import { Resolvers, PostFilter, PostGroup, PostCollection } from '../generated/graphql'
+import { Resolvers, PostFilter, PostGroup } from '../generated/graphql'
+import { PERMISSION_ERROR } from '../errorMessages'
 
 const resolver: Resolvers = {
   Post: {
@@ -133,42 +134,41 @@ const resolver: Resolvers = {
     },
   },
   Mutation: {
-    postCreate: async (_, { input }) => {
-      try {
-        const { authorID, url, hashTags } = input
-
-        const { error, result } = await ogs({
-          url,
-          onlyGetOpenGraphInfo: true,
-        })
-
-        const post = await Post.create({
-          authorID,
-          url,
-          title: result?.ogTitle || '',
-          description: result?.ogDescription || '',
-          previewURL: result?.ogImage?.url || '',
-        })
-
-        if (error) throw new ApolloError(error)
-
-        await Promise.all(
-          hashTags.map(async hashTagName => {
-            const [hashTag] = await HashTag.findOrCreate({
-              where: { name: hashTagName, postID: post?.id },
-            })
-            await PostHashTagConnection.create({
-              postID: post?.id,
-              hashtagID: hashTag?.id,
-            })
-          }),
-        )
-
-        return { post }
-      } catch (error) {
-        console.log(error)
-        throw new Error(error)
+    postCreate: async (_, { input }, { currentUser }) => {
+      if (!currentUser) {
+        new AuthenticationError(PERMISSION_ERROR)
       }
+
+      const { url, hashTags } = input
+
+      const { error, result } = await ogs({
+        url,
+        onlyGetOpenGraphInfo: true,
+      })
+
+      const post = await Post.create({
+        authorID: currentUser?.id,
+        url,
+        title: result?.ogTitle || '',
+        description: result?.ogDescription || '',
+        previewURL: result?.ogImage?.url || '',
+      })
+
+      if (error) throw new ApolloError(error)
+
+      await Promise.all(
+        hashTags.map(async hashTagName => {
+          const [hashTag] = await HashTag.findOrCreate({
+            where: { name: hashTagName, postID: post?.id },
+          })
+          await PostHashTagConnection.create({
+            postID: post?.id,
+            hashtagID: hashTag?.id,
+          })
+        }),
+      )
+
+      return { post }
     },
     postUpdate: async (_, { input }) => {
       try {

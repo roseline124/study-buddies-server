@@ -24,7 +24,6 @@ type Mutation {
 }
 
 input PostCreateInput {
-  authorID: String!
   url: String!
   hashTags: [String!]
 }
